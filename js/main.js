@@ -100,7 +100,7 @@ function animate() {
   requestAnimationFrame(animate);
 
   if (model) {
-    model.rotation.x += 0.005;
+    model.rotation.y += 0.005;
   }
 
   renderer.render(scene, camera);
