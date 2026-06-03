@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Mystery+Quest&display=swap');
 :root {
-  /* Paleta sofisticada inspirada en interiorismo y galerías de arte */
-  --color-bg: #F9F8F6; /* Blanco cálido / marfil */
-  --color-surface: rgba(255, 255, 255, 0.75); /* Cristal claro */
-  --color-surface-border: rgba(0, 0, 0, 0.05);
-  --color-text-main: #1A1A1A; /* Carbón profundo para contraste */
-  --color-text-muted: #666666; /* Gris neutro para textos secundarios */
+  /* Paleta oscura y mística para complementar la escena morada de Three.js */
+  --color-bg: #090514; /* Negro con tono púrpura profundo */
+  --color-surface: rgba(25, 15, 40, 0.65); /* Cristal oscuro violeta */
+  --color-surface-border: rgba(142, 197, 252, 0.15); /* Borde sutil azulado/morado */
+  --color-text-main: #FFFFFF; /* Texto principal blanco */
+  --color-text-muted: #B3A5D8; /* Texto secundario lavanda grisáceo */
   
-  --accent-start: #A67C52; /* Bronce / Madera cálida */
-  --accent-end: #C5A059; /* Oro suave */
+  --accent-start: #e0c3fc; /* Morado claro (de tu gradiente original) */
+  --accent-end: #8ec5fc; /* Azul claro (de tu gradiente original) */
   
-  --color-cta-text: #FFFFFF;
+  --color-cta-text: #090514; /* Texto oscuro para el botón */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Google Sans Flex", sans-serif; }
@@ -74,10 +74,9 @@ p{
 
 .section-content h1 {
   margin-bottom: 1.5rem;
-  color: var(--color-text-main); /* Color sólido elegante en lugar de gradiente */
-  -webkit-background-clip: initial;
-  -webkit-text-fill-color: initial;
-  background: none;
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .section-content p {
