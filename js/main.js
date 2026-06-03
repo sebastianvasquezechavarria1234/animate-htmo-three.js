@@ -37,13 +37,6 @@ const fillLight = new THREE.DirectionalLight(0x8888ff, 0.4);
 fillLight.position.set(-3, 2, -3);
 scene.add(fillLight);
 
-const groundGeo = new THREE.PlaneGeometry(20, 20);
-const groundMat = new THREE.MeshStandardMaterial({ color: 0x2a2a4a });
-const ground = new THREE.Mesh(groundGeo, groundMat);
-ground.rotation.x = -Math.PI / 2;
-ground.position.y = 0;
-scene.add(ground);
-
 const loader = new GLTFLoader();
 loader.load(
   'model/psxwnauq_inspyrenet_upscayl_2x_Stone_tower_covered_in_vines_and_.glb',
