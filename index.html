@@ -6,13 +6,13 @@
   <title>Animate Home - 3D Viewer</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #1a1a2e; font-family: 'Segoe UI', sans-serif; color: #fff; }
+    body { background: transparent; font-family: 'Segoe UI', sans-serif; color: #fff; }
 
     #viewer {
       position: fixed;
       top: 0; left: 0;
-      width: 55vw; height: 100vh;
-      z-index: 5;
+      width: 100vw; height: 100vh;
+      z-index: 1;
       transition: none;
     }
 
@@ -23,18 +23,23 @@
       display: flex;
       align-items: center;
       position: relative;
+      z-index: 2;
+      background: transparent;
     }
 
     .section-content {
       width: 45%;
       margin-left: 55%;
       padding: 4rem 5rem;
+      background: rgba(26, 26, 46, 0.85);
+      border-radius: 1rem;
+      margin-right: 3rem;
     }
 
     .section-2 .section-content {
-      margin-left: 0;
+      margin-left: 3rem;
       margin-right: 55%;
-      padding-right: 0;
+      padding-right: 4rem;
     }
 
     .section-content h1 {
@@ -79,7 +84,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #1a1a2e;
+      background: transparent;
       color: #fff;
       font-size: 1.1rem;
       z-index: 20;

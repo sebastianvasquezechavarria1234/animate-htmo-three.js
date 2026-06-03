@@ -12,7 +12,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.set(0, 2, 6);
+camera.position.set(0, 2.5, 7);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(container.clientWidth, container.clientHeight);
@@ -20,6 +20,8 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.2;
 container.appendChild(renderer.domElement);
+
+camera.lookAt(0, 2, 0);
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
@@ -47,6 +49,7 @@ loader.load(
     model.scale.setScalar(scale);
     model.position.sub(center.multiplyScalar(scale));
     model.position.y -= box.min.y;
+    model.position.y += 1.5;
 
     scene.add(model);
 
@@ -71,20 +74,6 @@ const section1 = document.getElementById('section1');
 const section2 = document.getElementById('section2');
 
 function updateContainerPosition() {
-  const scrollY = window.scrollY;
-  const vh = window.innerHeight;
-  const progress = Math.min(Math.max(scrollY / vh, 0), 1);
-
-  const leftS1 = '0vw';
-  const leftS2 = '45vw';
-  const widthS1 = '55vw';
-  const widthS2 = '55vw';
-
-  const currentLeft = progress * 45;
-  const currentWidth = 55;
-
-  container.style.left = `${currentLeft}vw`;
-  container.style.width = `${currentWidth}vw`;
 }
 
 window.addEventListener('scroll', updateContainerPosition, { passive: true });
