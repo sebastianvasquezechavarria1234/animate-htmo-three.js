@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const container = document.getElementById('viewer');
 
@@ -13,7 +12,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.set(3, 2, 5);
+camera.position.set(0, 2, 6);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(container.clientWidth, container.clientHeight);
@@ -21,12 +20,6 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.2;
 container.appendChild(renderer.domElement);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.target.set(0, 1, 0);
-controls.update();
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
@@ -39,11 +32,13 @@ const fillLight = new THREE.DirectionalLight(0x8888ff, 0.4);
 fillLight.position.set(-3, 2, -3);
 scene.add(fillLight);
 
+let model = null;
+
 const loader = new GLTFLoader();
 loader.load(
   'model/psxwnauq_inspyrenet_upscayl_2x_Stone_tower_covered_in_vines_and_.glb',
   (gltf) => {
-    const model = gltf.scene;
+    model = gltf.scene;
     const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
@@ -54,8 +49,6 @@ loader.load(
     model.position.y -= box.min.y;
 
     scene.add(model);
-    controls.target.set(0, size.y * scale * 0.4, 0);
-    controls.update();
 
     const loading = document.getElementById('loading');
     loading.style.opacity = '0';
@@ -74,15 +67,42 @@ loader.load(
   }
 );
 
-window.addEventListener('resize', () => {
+const section1 = document.getElementById('section1');
+const section2 = document.getElementById('section2');
+
+function updateContainerPosition() {
+  const scrollY = window.scrollY;
+  const vh = window.innerHeight;
+  const progress = Math.min(Math.max(scrollY / vh, 0), 1);
+
+  const leftS1 = '0vw';
+  const leftS2 = '45vw';
+  const widthS1 = '55vw';
+  const widthS2 = '55vw';
+
+  const currentLeft = progress * 45;
+  const currentWidth = 55;
+
+  container.style.left = `${currentLeft}vw`;
+  container.style.width = `${currentWidth}vw`;
+}
+
+window.addEventListener('scroll', updateContainerPosition, { passive: true });
+
+function onResize() {
   camera.aspect = container.clientWidth / container.clientHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth, container.clientHeight);
-});
+}
+window.addEventListener('resize', onResize);
 
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
+
+  if (model) {
+    model.rotation.x += 0.005;
+  }
+
   renderer.render(scene, camera);
 }
 animate();
