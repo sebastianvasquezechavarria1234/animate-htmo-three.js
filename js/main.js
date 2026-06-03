@@ -78,11 +78,9 @@ function updateContainerPosition() {
   const vh = window.innerHeight;
   const progress = Math.min(Math.max(scrollY / vh, 0), 1);
 
-  container.style.left = `${progress * 45}vw`;
-
-  camera.aspect = container.clientWidth / container.clientHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(container.clientWidth, container.clientHeight);
+  if (model) {
+    model.position.x = -2 + progress * 4;
+  }
 }
 
 window.addEventListener('scroll', updateContainerPosition, { passive: true });
