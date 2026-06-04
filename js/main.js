@@ -187,9 +187,10 @@ function animate() {
 
     const progress = Math.min(Math.max(window.scrollY / (window.innerHeight * 2), 0), 1);
 
-    if (progress >= 0.8) {
-      camTarget.z = 4;
-      camLookTarget.y = 2.5;
+    if (progress > 0.7) {
+      const t = easeInOutCubic(Math.min((progress - 0.7) / 0.3, 1));
+      camTarget.z = lerp(7, 4, t);
+      camLookTarget.y = lerp(2, 2.5, t);
     } else {
       camTarget.z = 7;
       camLookTarget.y = 2;
