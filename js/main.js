@@ -55,11 +55,7 @@ loader.load(
     model.position.x = -2;
 
     scene.add(model);
-
-    setTimeout(() => {
-      loading.classList.add('hidden');
-      setTimeout(() => loading.style.display = 'none', 800);
-    }, 500);
+    hideLoading();
   },
   (progress) => {
     if (progress.total) {
@@ -71,8 +67,16 @@ loader.load(
   (error) => {
     console.error('Error cargando modelo:', error);
     loading.querySelector('.loading-text').textContent = 'Error al cargar.';
+    hideLoading();
   }
 );
+
+function hideLoading() {
+  loading.classList.add('hidden');
+  setTimeout(() => { loading.style.display = 'none'; }, 800);
+}
+
+setTimeout(() => { hideLoading(); }, 4000);
 
 const section1 = document.getElementById('section1');
 const section2 = document.getElementById('section2');
@@ -95,48 +99,57 @@ function updateOnScroll() {
   const totalScroll = vh * 2;
   const progress = Math.min(Math.max(scrollY / totalScroll, 0), 1);
 
-  const eased = easeInOutCubic(progress);
+  // Viewer movement: 3 phases
+  // Phase 1 (0-0.33): canvas left (50%), text right
+  // Phase 2 (0.33-0.66): canvas right (50%), text left
+  // Phase 3 (0.66-1): canvas full (100%), text center
 
-  // Split screen logic
-  if (progress <= 0.5) {
-    container.style.left = `${lerp(0, 50, eased * 2)}vw`;
+  if (progress <= 0.33) {
+    const t = easeInOutCubic(progress / 0.33);
+    container.style.left = `${lerp(0, 50, t)}vw`;
+    container.style.width = '50vw';
+  } else if (progress <= 0.66) {
+    const t = easeInOutCubic((progress - 0.33) / 0.33);
+    container.style.left = `${lerp(50, 0, t)}vw`;
     container.style.width = '50vw';
   } else {
+    const t = easeInOutCubic((progress - 0.66) / 0.34);
     container.style.left = '0';
-    const t = easeInOutCubic((progress - 0.5) * 2);
     container.style.width = `${lerp(50, 100, t)}vw`;
   }
 
+  // Camera follows model
   if (model) {
-    // Keep camera following model
     camTarget.x = model.position.x;
     camTarget.z = 7;
     camLookTarget.x = model.position.x;
   }
 
-  const s1Content = section1.querySelector('.section-content');
-  const s2Content = section2.querySelector('.section-content');
-  const s3Content = section3.querySelector('.section-content');
+  // Text visibility
+  const s1 = section1.querySelector('.section-content');
+  const s2 = section2.querySelector('.section-content');
+  const s3 = section3.querySelector('.section-content');
 
-  // Text Visibility Logic
   if (progress < 0.25) {
-    s1Content.classList.add('visible');
-    s2Content.classList.remove('visible');
-    s3Content.classList.remove('visible');
-  } else if (progress >= 0.25 && progress < 0.5) {
-    s1Content.classList.remove('visible');
-    s2Content.classList.remove('visible');
-    s3Content.classList.remove('visible');
-  } else if (progress >= 0.5 && progress < 0.75) {
-    s1Content.classList.remove('visible');
-    s2Content.classList.add('visible');
-    s3Content.classList.remove('visible');
-  } else if (progress >= 0.75 && progress < 0.9) {
-    s2Content.classList.remove('visible');
-    s3Content.classList.remove('visible');
+    s1.classList.add('visible');
+    s2.classList.remove('visible');
+    s3.classList.remove('visible');
+  } else if (progress >= 0.25 && progress < 0.42) {
+    s1.classList.remove('visible');
+    s2.classList.remove('visible');
+    s3.classList.remove('visible');
+  } else if (progress >= 0.42 && progress < 0.58) {
+    s1.classList.remove('visible');
+    s2.classList.add('visible');
+    s3.classList.remove('visible');
+  } else if (progress >= 0.58 && progress < 0.75) {
+    s1.classList.remove('visible');
+    s2.classList.remove('visible');
+    s3.classList.remove('visible');
   } else {
-    s2Content.classList.remove('visible');
-    s3Content.classList.add('visible');
+    s1.classList.remove('visible');
+    s2.classList.remove('visible');
+    s3.classList.add('visible');
   }
 }
 
