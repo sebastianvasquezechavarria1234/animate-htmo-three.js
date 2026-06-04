@@ -83,18 +83,21 @@ body { background: var(--color-bg); color: var(--color-text-main); overflow-x: h
 .section-1 {
   justify-content: flex-end;
   margin-right: 3rem;
+  background: rgba(255, 0, 0, 0.15);
 }
 
 /* Section 2: text left */
 .section-2 {
   justify-content: flex-start;
   margin-left: 3rem;
+  background: rgba(255, 255, 0, 0.15);
 }
 
 /* Section 3: text center */
 .section-3 {
   justify-content: center;
   text-align: center;
+  background: rgba(0, 100, 255, 0.15);
 }
 
 .content-center {
@@ -106,10 +109,14 @@ body { background: var(--color-bg); color: var(--color-text-main); overflow-x: h
 /* Character animation */
 .char {
   display: inline-block;
+  font-family: "Mystery Quest", system-ui;
   opacity: 0;
   filter: blur(10px);
   transform: scale(0.5);
   transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .section-content.visible .char {
@@ -124,9 +131,7 @@ h1 {
   font-size: 3.6rem;
   line-height: 1.10;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-style: italic;
 }
 
 a, p, button {
@@ -142,6 +147,7 @@ p {
 
 .cta {
   display: inline-block;
+  font-family: "Mystery Quest", system-ui;
   padding: 1rem 3rem;
   background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
   color: var(--color-bg);
