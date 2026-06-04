@@ -117,11 +117,11 @@ function updateOnScroll() {
   // Phase 2: Session 2 (0.5 - 0.8) -> scenario stays RIGHT
   // Transition 2->3 (0.8 - 1.0) -> scenario goes CENTER + 100% width
 
-  if (progress <= 0.4) {
+  if (progress <= 0.3) {
     container.style.left = '0';
     container.style.width = '50vw';
-  } else if (progress <= 0.5) {
-    const t = easeInOutCubic((progress - 0.4) / 0.1);
+  } else if (progress <= 0.4) {
+    const t = easeInOutCubic((progress - 0.3) / 0.1);
     container.style.left = `${lerp(0, 50, t)}vw`;
     container.style.width = '50vw';
   } else if (progress <= 0.8) {
@@ -184,6 +184,16 @@ function animate() {
     const time = performance.now() * 0.001;
     model.position.y = baseY + Math.sin(time * 1.2) * 0.15;
     model.rotation.y = Math.sin(time * 0.5) * 0.3;
+
+    const progress = Math.min(Math.max(window.scrollY / (window.innerHeight * 2), 0), 1);
+
+    if (progress >= 0.8) {
+      camTarget.z = 4;
+      camLookTarget.y = 2.5;
+    } else {
+      camTarget.z = 7;
+      camLookTarget.y = 2;
+    }
 
     camera.position.lerp(camTarget, 0.05);
     camera.lookAt(camLookTarget);
