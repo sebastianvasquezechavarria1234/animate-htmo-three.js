@@ -1,119 +1,108 @@
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Mystery+Quest&display=swap');
+
 :root {
-  /* Paleta oscura y mística para complementar la escena morada de Three.js */
-  --color-bg: #090514; /* Negro con tono púrpura profundo */
-  --color-surface: rgba(25, 15, 40, 0.65); /* Cristal oscuro violeta */
-  --color-surface-border: rgba(142, 197, 252, 0.15); /* Borde sutil azulado/morado */
-  --color-text-main: #FFFFFF; /* Texto principal blanco */
-  --color-text-muted: #B3A5D8; /* Texto secundario lavanda grisáceo */
-  
-  --accent-start: #e0c3fc; /* Morado claro (de tu gradiente original) */
-  --accent-end: #8ec5fc; /* Azul claro (de tu gradiente original) */
-  
-  --color-cta-text: #090514; /* Texto oscuro para el botón */
+  --color-bg: #090514;
+  --color-text-main: #FFFFFF;
+  --color-text-muted: #B3A5D8;
+  --accent-start: #e0c3fc;
+  --accent-end: #8ec5fc;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Google Sans Flex", sans-serif; }
-body { background: var(--color-bg); color: var(--color-text-main); }
+body { background: var(--color-bg); color: var(--color-text-main); overflow-x: hidden; }
 
-#viewer {
+/* Loading */
+#loading {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  z-index: 100;
+  transition: opacity 0.8s ease;
+}
+
+#loading.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-text {
+  font-family: "Mystery Quest", system-ui;
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* Viewer */
+#viewer {
+  position: fixed;
+  top: 0; left: 0;
+  width: 50vw; height: 100vh;
   z-index: 1;
-  transition: none;
-}
-
-h1{
-   font-family: "Mystery Quest", system-ui !important;
-  font-weight: 300;
-  font-size: 3.6rem;
-  line-height: 1.10;
-}
-
-a, p, button{
-  font-size: 1.1rem;
-  font-weight: 300;
-  line-height: 1.6;
-}
-
-p{
-  color: var(--color-text-muted);
 }
 
 #viewer canvas { display: block; width: 100%; height: 100%; }
 
+/* Sections */
 .section {
   height: 100vh;
   display: flex;
   align-items: center;
   position: relative;
   z-index: 2;
-  background: transparent;
+  margin-left: 50vw;
 }
 
 .section-content {
-  width: 45%;
-  margin-left: 55%;
   padding: 4rem 5rem;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  border-radius: 0; /* Bordes más rectos para un look más arquitectónico */
-  margin-right: 3rem;
-}
-
-.section-2 .section-content {
-  margin-left: 3rem;
-  margin-right: 55%;
-  padding-right: 4rem;
-}
-
-.section-3 .section-content {
-  margin-left: 55%;
-  margin-right: 3rem;
-}
-
-/* Text animations */
-.section-content {
   opacity: 0;
-  transform: translateX(60px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .section-content.visible {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
-.section-content.exit-left {
-  opacity: 0;
-  transform: translateX(-60px);
-}
-
-.section-content.exit-right {
-  opacity: 0;
-  transform: translateX(60px);
-}
-
-.section-content h1 {
+h1 {
+  font-family: "Mystery Quest", system-ui !important;
+  font-weight: 300;
+  font-size: 3.6rem;
+  line-height: 1.10;
   margin-bottom: 1.5rem;
   background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.section-content p {
+a, p, button {
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
 
+p {
+  color: var(--color-text-muted);
   margin-bottom: 2.5rem;
 }
 
-.section-content .cta {
+.cta {
   display: inline-block;
   padding: 1rem 3rem;
   background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  color: var(--color-cta-text);
+  color: var(--color-bg);
   font-weight: 400;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -125,31 +114,42 @@ p{
   transition: all 0.4s ease;
 }
 
-.section-content .cta:hover {
+.cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(166, 124, 82, 0.3);
   background: linear-gradient(135deg, var(--accent-end), var(--accent-start));
 }
 
-#loading {
+/* Credits */
+.credits {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  bottom: 2rem;
+  left: 2rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: #fff;
-  font-size: 1.1rem;
-  z-index: 20;
-  transition: opacity 0.5s;
+  gap: 2rem;
+  z-index: 10;
+}
+
+.credit-link {
+  font-family: "Mystery Quest", system-ui;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-style: italic;
+  border-bottom: 1px solid var(--color-text-muted);
+  padding-bottom: 2px;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.credit-link:hover {
+  color: var(--accent-start);
+  border-color: var(--accent-start);
 }
 
 @media (max-width: 900px) {
   #viewer { width: 100vw; height: 50vh; }
-  .section { flex-direction: column; height: auto; min-height: 100vh; }
-  .section-content { width: 100%; margin: 0; padding: 2rem; }
-  .section-2 .section-content { margin: 0; }
-  .section-content h1 { font-size: 2rem; }
-  #loading { height: 100%; }
+  .section { margin-left: 0; margin-top: 50vh; }
+  .section-content { padding: 2rem; width: 100%; }
+  h1 { font-size: 2rem; }
+  .credits { flex-direction: column; gap: 0.5rem; }
 }
