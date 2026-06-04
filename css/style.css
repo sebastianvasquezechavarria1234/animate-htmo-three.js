@@ -50,6 +50,7 @@ body { background: var(--color-bg); color: var(--color-text-main); overflow-x: h
   top: 0; left: 0;
   width: 50vw; height: 100vh;
   z-index: 1;
+  transition: left 0.1s linear;
 }
 
 #viewer canvas { display: block; width: 100%; height: 100%; }

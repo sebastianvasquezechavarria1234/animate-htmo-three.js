@@ -96,7 +96,7 @@ function updateOnScroll() {
 
   const eased = easeInOutCubic(progress);
 
-  container.style.width = `${lerp(50, 100, eased)}vw`;
+  container.style.left = `${lerp(0, 50, eased)}vw`;
 
   if (model) {
     model.position.x = lerp(-2, 2, eased);
