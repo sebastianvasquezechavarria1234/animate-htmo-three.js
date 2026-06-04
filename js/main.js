@@ -78,6 +78,19 @@ function hideLoading() {
 
 setTimeout(() => { hideLoading(); }, 4000);
 
+// Split h1 text into character spans
+document.querySelectorAll('h1').forEach(h1 => {
+  const text = h1.textContent;
+  h1.innerHTML = '';
+  [...text].forEach((char, i) => {
+    const span = document.createElement('span');
+    span.className = 'char';
+    span.textContent = char === ' ' ? '\u00A0' : char;
+    span.style.transitionDelay = `${i * 0.03}s`;
+    h1.appendChild(span);
+  });
+});
+
 const section1 = document.getElementById('section1');
 const section2 = document.getElementById('section2');
 const section3 = document.getElementById('section3');
