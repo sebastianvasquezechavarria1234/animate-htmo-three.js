@@ -112,22 +112,24 @@ function updateOnScroll() {
   const totalScroll = vh * 2;
   const progress = Math.min(Math.max(scrollY / totalScroll, 0), 1);
 
-  // Viewer movement: 3 phases
-  // Phase 1 (0-0.33): canvas left (50%), text right
-  // Phase 2 (0.33-0.66): canvas right (50%), text left
-  // Phase 3 (0.66-1): canvas full (100%), text center
+  // Phase 1: Session 1 (0 - 0.4) -> scenario stays LEFT
+  // Transition 1->2 (0.4 - 0.5) -> scenario moves RIGHT
+  // Phase 2: Session 2 (0.5 - 0.8) -> scenario stays RIGHT
+  // Transition 2->3 (0.8 - 1.0) -> scenario goes CENTER + 100% width
 
-  if (progress <= 0.33) {
-    const t = easeInOutCubic(progress / 0.33);
+  if (progress <= 0.4) {
+    container.style.left = '0';
+    container.style.width = '50vw';
+  } else if (progress <= 0.5) {
+    const t = easeInOutCubic((progress - 0.4) / 0.1);
     container.style.left = `${lerp(0, 50, t)}vw`;
     container.style.width = '50vw';
-  } else if (progress <= 0.66) {
-    const t = easeInOutCubic((progress - 0.33) / 0.33);
-    container.style.left = `${lerp(50, 0, t)}vw`;
+  } else if (progress <= 0.8) {
+    container.style.left = '50vw';
     container.style.width = '50vw';
   } else {
-    const t = easeInOutCubic((progress - 0.66) / 0.34);
-    container.style.left = '0';
+    const t = easeInOutCubic((progress - 0.8) / 0.2);
+    container.style.left = `${lerp(50, 0, t)}vw`;
     container.style.width = `${lerp(50, 100, t)}vw`;
   }
 
@@ -143,19 +145,19 @@ function updateOnScroll() {
   const s2 = section2.querySelector('.section-content');
   const s3 = section3.querySelector('.section-content');
 
-  if (progress < 0.25) {
+  if (progress < 0.35) {
     s1.classList.add('visible');
     s2.classList.remove('visible');
     s3.classList.remove('visible');
-  } else if (progress >= 0.25 && progress < 0.42) {
+  } else if (progress >= 0.35 && progress < 0.5) {
     s1.classList.remove('visible');
     s2.classList.remove('visible');
     s3.classList.remove('visible');
-  } else if (progress >= 0.42 && progress < 0.58) {
+  } else if (progress >= 0.5 && progress < 0.75) {
     s1.classList.remove('visible');
     s2.classList.add('visible');
     s3.classList.remove('visible');
-  } else if (progress >= 0.58 && progress < 0.75) {
+  } else if (progress >= 0.75 && progress < 0.85) {
     s1.classList.remove('visible');
     s2.classList.remove('visible');
     s3.classList.remove('visible');
