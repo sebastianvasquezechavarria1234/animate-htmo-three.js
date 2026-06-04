@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const container = document.getElementById('viewer');
 const loading = document.getElementById('loading');
+const closeBtn = document.getElementById('close-viewer');
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1a1a2e);
@@ -23,6 +25,11 @@ renderer.toneMappingExposure = 1.2;
 container.appendChild(renderer.domElement);
 
 camera.lookAt(-2, 2, 0);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.enabled = false;
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
@@ -78,7 +85,6 @@ function hideLoading() {
 
 setTimeout(() => { hideLoading(); }, 4000);
 
-// Split h1 text into character spans
 document.querySelectorAll('h1').forEach(h1 => {
   const text = h1.textContent;
   h1.innerHTML = '';
@@ -94,6 +100,7 @@ document.querySelectorAll('h1').forEach(h1 => {
 const section1 = document.getElementById('section1');
 const section2 = document.getElementById('section2');
 const section3 = document.getElementById('section3');
+const sections = [section1, section2, section3];
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
@@ -106,16 +113,49 @@ function easeInOutCubic(t) {
 const camTarget = new THREE.Vector3(-2, 2.5, 7);
 const camLookTarget = new THREE.Vector3(-2, 2, 0);
 
+let isFullscreen = false;
+
+function enterFullscreen() {
+  isFullscreen = true;
+  sections.forEach(s => s.classList.add('hidden'));
+  document.querySelector('.credits').classList.add('hidden');
+  container.style.left = '0';
+  container.style.width = '100vw';
+  container.style.height = '100vh';
+  controls.enabled = true;
+  closeBtn.classList.remove('hidden');
+  camera.position.set(-2, 2.5, 7);
+  camera.lookAt(-2, 2, 0);
+  onResize();
+}
+
+function exitFullscreen() {
+  isFullscreen = false;
+  sections.forEach(s => s.classList.remove('hidden'));
+  document.querySelector('.credits').classList.remove('hidden');
+  container.style.height = '100vh';
+  controls.enabled = false;
+  closeBtn.classList.add('hidden');
+  window.scrollTo(0, 0);
+  onResize();
+}
+
+document.querySelectorAll('.ver-modelo').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    enterFullscreen();
+  });
+});
+
+closeBtn.addEventListener('click', exitFullscreen);
+
 function updateOnScroll() {
+  if (isFullscreen) return;
+
   const scrollY = window.scrollY;
   const vh = window.innerHeight;
   const totalScroll = vh * 2;
   const progress = Math.min(Math.max(scrollY / totalScroll, 0), 1);
-
-  // Phase 1: Session 1 (0 - 0.4) -> scenario stays LEFT
-  // Transition 1->2 (0.4 - 0.5) -> scenario moves RIGHT
-  // Phase 2: Session 2 (0.5 - 0.8) -> scenario stays RIGHT
-  // Transition 2->3 (0.8 - 1.0) -> scenario goes CENTER + 100% width
 
   if (progress <= 0.3) {
     container.style.left = '0';
@@ -133,14 +173,12 @@ function updateOnScroll() {
     container.style.width = `${lerp(50, 100, t)}vw`;
   }
 
-  // Camera follows model
   if (model) {
     camTarget.x = model.position.x;
     camTarget.z = 7;
     camLookTarget.x = model.position.x;
   }
 
-  // Text visibility
   const s1 = section1.querySelector('.section-content');
   const s2 = section2.querySelector('.section-content');
   const s3 = section3.querySelector('.section-content');
@@ -180,7 +218,11 @@ window.addEventListener('resize', onResize);
 function animate() {
   requestAnimationFrame(animate);
 
-  if (model) {
+  if (controls.enabled) {
+    controls.update();
+  }
+
+  if (model && !isFullscreen) {
     const time = performance.now() * 0.001;
     model.position.y = baseY + Math.sin(time * 1.2) * 0.15;
     model.rotation.y = Math.sin(time * 0.5) * 0.3;
