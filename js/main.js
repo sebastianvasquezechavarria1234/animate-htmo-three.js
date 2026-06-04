@@ -92,16 +92,20 @@ function updateContainerPosition() {
   const progress = Math.min(Math.max(rawProgress, 0), 1);
 
   if (model) {
-    if (progress <= 0.5) {
+    if (progress < 0.02) {
+      model.position.x = 0;
+      model.position.z = 0;
+      model.scale.setScalar(1);
+    } else if (progress <= 0.5) {
       const t = easeInOutCubic(progress * 2);
-      model.position.x = lerp(-3, 3, t);
-      model.position.z = lerp(0, -1, t);
-      model.scale.setScalar(lerp(1, 1.3, t));
+      model.position.x = lerp(0, 3, t);
+      model.position.z = lerp(0, -1.5, t);
+      model.scale.setScalar(lerp(1, 1.2, t));
     } else {
       const t = easeInOutCubic((progress - 0.5) * 2);
       model.position.x = lerp(3, 0, t);
-      model.position.z = lerp(-1, 2, t);
-      model.scale.setScalar(lerp(1.3, 0.9, t));
+      model.position.z = lerp(-1.5, 1.5, t);
+      model.scale.setScalar(lerp(1.2, 1, t));
     }
   }
 
@@ -149,12 +153,23 @@ function updateTextAnimations(scrollY, vh) {
 
 window.addEventListener('scroll', updateContainerPosition, { passive: true });
 
+const section1Content = section1.querySelector('.section-content');
+if (section1Content) {
+  section1Content.style.opacity = '1';
+  section1Content.style.transform = 'translateX(0)';
+}
+
+updateContainerPosition();
+
 function onResize() {
   camera.aspect = container.clientWidth / container.clientHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth, container.clientHeight);
 }
 window.addEventListener('resize', onResize);
+
+const camTarget = new THREE.Vector3(0, 2.5, 4);
+const camLookTarget = new THREE.Vector3(0, 2, 0);
 
 function animate() {
   requestAnimationFrame(animate);
@@ -163,6 +178,13 @@ function animate() {
     const time = performance.now() * 0.001;
     model.position.y = baseY + Math.sin(time * 1.2) * 0.15;
     model.rotation.y = Math.sin(time * 0.5) * 0.3;
+
+    camTarget.x = model.position.x;
+    camTarget.z = model.position.z + 4;
+    camLookTarget.x = model.position.x;
+
+    camera.position.lerp(camTarget, 0.05);
+    camera.lookAt(camLookTarget);
   }
 
   renderer.render(scene, camera);
