@@ -120,8 +120,8 @@ function updateOnScroll() {
   if (progress <= 0.3) {
     container.style.left = '0';
     container.style.width = '50vw';
-  } else if (progress <= 0.4) {
-    const t = easeInOutCubic((progress - 0.3) / 0.1);
+  } else if (progress <= 0.5) {
+    const t = easeInOutCubic((progress - 0.3) / 0.2);
     container.style.left = `${lerp(0, 50, t)}vw`;
     container.style.width = '50vw';
   } else if (progress <= 0.8) {

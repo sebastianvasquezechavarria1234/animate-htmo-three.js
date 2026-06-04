@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Mystery+Quest&display=swap');
 
 :root {
-  --color-bg: #090514;
+  --color-bg: #1a1a2e;
   --color-text-main: #FFFFFF;
   --color-text-muted: #B3A5D8;
   --accent-start: #e0c3fc;
@@ -83,21 +83,18 @@ body { background: var(--color-bg); color: var(--color-text-main); overflow-x: h
 .section-1 {
   justify-content: flex-end;
   margin-right: 3rem;
-  background: rgba(255, 0, 0, 0.15);
 }
 
 /* Section 2: text left */
 .section-2 {
   justify-content: flex-start;
   margin-left: 3rem;
-  background: rgba(255, 255, 0, 0.15);
 }
 
 /* Section 3: text center */
 .section-3 {
   justify-content: center;
   text-align: center;
-  background: rgba(0, 100, 255, 0.15);
 }
 
 .content-center {
