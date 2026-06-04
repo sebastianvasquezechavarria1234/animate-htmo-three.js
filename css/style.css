@@ -65,6 +65,23 @@ body { background: var(--color-bg); color: var(--color-text-main); overflow-x: h
   margin-left: 50vw;
 }
 
+.section-2 .section-content {
+  margin-left: 3rem;
+}
+
+.section-3 {
+  margin-left: 0;
+}
+
+.section-content-center {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .section-content {
   padding: 4rem 5rem;
   opacity: 0;
@@ -150,7 +167,9 @@ p {
 @media (max-width: 900px) {
   #viewer { width: 100vw; height: 50vh; }
   .section { margin-left: 0; margin-top: 50vh; }
+  .section-3 { margin-top: 0; }
   .section-content { padding: 2rem; width: 100%; }
+  .section-content-center { padding: 2rem; }
   h1 { font-size: 2rem; }
   .credits { flex-direction: column; gap: 0.5rem; }
 }

@@ -13,7 +13,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.set(-2, 2.5, 5);
+camera.position.set(-2, 2.5, 7);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(container.clientWidth, container.clientHeight);
@@ -76,6 +76,7 @@ loader.load(
 
 const section1 = document.getElementById('section1');
 const section2 = document.getElementById('section2');
+const section3 = document.getElementById('section3');
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
@@ -85,37 +86,57 @@ function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-const camTarget = new THREE.Vector3(-2, 2.5, 5);
+const camTarget = new THREE.Vector3(-2, 2.5, 7);
 const camLookTarget = new THREE.Vector3(-2, 2, 0);
 
 function updateOnScroll() {
   const scrollY = window.scrollY;
   const vh = window.innerHeight;
-  const totalScroll = vh;
+  const totalScroll = vh * 2;
   const progress = Math.min(Math.max(scrollY / totalScroll, 0), 1);
 
   const eased = easeInOutCubic(progress);
 
-  container.style.left = `${lerp(0, 50, eased)}vw`;
+  // Split screen logic
+  if (progress <= 0.5) {
+    container.style.left = `${lerp(0, 50, eased * 2)}vw`;
+    container.style.width = '50vw';
+  } else {
+    container.style.left = '0';
+    const t = easeInOutCubic((progress - 0.5) * 2);
+    container.style.width = `${lerp(50, 100, t)}vw`;
+  }
 
   if (model) {
-    model.position.x = lerp(-2, 2, eased);
+    // Keep camera following model
     camTarget.x = model.position.x;
+    camTarget.z = 7;
     camLookTarget.x = model.position.x;
   }
 
   const s1Content = section1.querySelector('.section-content');
   const s2Content = section2.querySelector('.section-content');
+  const s3Content = section3.querySelector('.section-content');
 
-  if (progress < 0.3) {
+  // Text Visibility Logic
+  if (progress < 0.25) {
     s1Content.classList.add('visible');
     s2Content.classList.remove('visible');
-  } else if (progress >= 0.3 && progress < 0.7) {
+    s3Content.classList.remove('visible');
+  } else if (progress >= 0.25 && progress < 0.5) {
     s1Content.classList.remove('visible');
     s2Content.classList.remove('visible');
-  } else {
+    s3Content.classList.remove('visible');
+  } else if (progress >= 0.5 && progress < 0.75) {
     s1Content.classList.remove('visible');
     s2Content.classList.add('visible');
+    s3Content.classList.remove('visible');
+  } else if (progress >= 0.75 && progress < 0.9) {
+    s2Content.classList.remove('visible');
+    s3Content.classList.remove('visible');
+  } else {
+    s2Content.classList.remove('visible');
+    s3Content.classList.add('visible');
   }
 }
 
